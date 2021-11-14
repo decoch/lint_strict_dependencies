@@ -5,4 +5,8 @@ class FileEntity {
 
   final String path;
   final File file;
+
+  List<String> readAsLinesSync() {
+    return file.readAsLinesSync();
+  }
 }
