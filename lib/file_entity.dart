@@ -1,12 +1,14 @@
 import 'dart:io';
 
 class FileEntity {
-  FileEntity(this.path, this.file);
+  FileEntity(this._path, this._file);
 
-  final String path;
-  final File file;
+  final String _path;
+  final File _file;
+
+  String get path => _path;
 
   List<String> readAsLinesSync() {
-    return file.readAsLinesSync();
+    return _file.readAsLinesSync();
   }
 }

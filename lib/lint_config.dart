@@ -1,6 +1,10 @@
 class LintConfig {
-  LintConfig(this.directoryConfigs);
+  LintConfig(
+    this.targetDirectories,
+    this.directoryConfigs,
+  );
 
+  final List<String> targetDirectories;
   final List<LintDirectoryConfig> directoryConfigs;
 }
 

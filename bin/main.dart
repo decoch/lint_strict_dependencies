@@ -26,5 +26,6 @@ void main(List<String> args) {
     final config = configYaml['rules'];
     print(packageName);
     print(config);
+    print(currentPath);
   }
 }
