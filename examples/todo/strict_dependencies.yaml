@@ -1,0 +1,14 @@
+rules:
+  - module: "ui/components"
+    allowReferenceFrom:
+      - "ui/pages"
+    allowSameModule: true
+  - module: "view_models"
+    allowReferenceFrom:
+      - "ui/pages"
+    allowSameModule: false
+  - module: "models"
+    allowReferenceFrom:
+      - "view_models"
+      - "ui/pages"
+    allowSameModule: false
