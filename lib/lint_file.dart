@@ -8,9 +8,9 @@ LintError? lintFile(LintConfig config, String packageName, FileEntity file) {
     final line = lines[i];
     if (line.startsWith('import ') && line.endsWith(';')) {
       if (line.contains('package:$packageName/')) {
-        final error = _lintLine(config, packageName, file.path, line);
-        if (error) {
-          return LintError('dummy', []);
+        final imports = _filterInvalid(config, packageName, file.path, line);
+        if (imports.isNotEmpty) {
+          return LintError(file.path, imports);
         }
       }
     }
@@ -18,21 +18,30 @@ LintError? lintFile(LintConfig config, String packageName, FileEntity file) {
   return null;
 }
 
-bool _lintLine(
+List<String> _filterInvalid(
   LintConfig config,
   String packageName,
   String path,
   String line,
 ) {
   if (!line.contains(packageName)) {
-    return false;
+    return [];
   }
   return config.directoryConfigs
-      .where((directoryConfig) => line.contains(directoryConfig.directory))
-      .where(
-        (directoryConfig) => !directoryConfig.allowedDirectories.any(
-          (allowed) => path.contains(allowed),
-        ),
-      )
-      .isNotEmpty;
+      .where((c) => line.contains(c.directory))
+      .where((c) => !_containsInAllowedSameDirectory(c, path))
+      .where((c) => !_containsInAllowedDirectories(c, path))
+      .map((_) => path)
+      .toList();
+}
+
+bool _containsInAllowedSameDirectory(
+  LintDirectoryConfig config,
+  String path,
+) {
+  return config.allowedSameDirectory && path.contains(config.directory);
+}
+
+bool _containsInAllowedDirectories(LintDirectoryConfig config, String path) {
+  return config.allowedDirectories.any((allowed) => path.contains(allowed));
 }

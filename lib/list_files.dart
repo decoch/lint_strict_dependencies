@@ -3,11 +3,7 @@ import 'dart:io';
 import 'package:lint_strict_dependencies/file_entity.dart';
 import 'package:lint_strict_dependencies/lint_config.dart';
 
-List<FileEntity> listFiles(
-  LintConfig config,
-  String currentPath,
-  List<String> args,
-) {
+List<FileEntity> listFiles(LintConfig config, String currentPath) {
   final targetFileSystemEntities = config.targetDirectories
       .map((directory) => _readDir(currentPath, directory))
       .expand((files) => files)
