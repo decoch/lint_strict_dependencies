@@ -1,6 +1,6 @@
 name: lint_strict_dependencies
 description: Linter for strict dependencies
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/decoch/lint_strict_dependencies
 
 environment:
