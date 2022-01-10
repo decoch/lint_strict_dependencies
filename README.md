@@ -1,39 +1,39 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# lint_strict_dependencies
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Simple linter of strict dependencies for Flutter apps.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### Install
 
-```dart
-const like = 'sample';
+```yaml
+dev_dependencies:
+  lint_strict_dependencies: any
 ```
 
-## Additional information
+### Config
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+To use lint_strict_dependencies, you need adding setting to your strict_dependencies.yaml.
+
+```yaml
+rules:
+  - module: "ui/components"
+    allowReferenceFrom:
+      - "ui/pages"
+    allowSameModule: true
+  - module: "view_models"
+    allowReferenceFrom:
+      - "ui/pages"
+    allowSameModule: false
+  - module: "models"
+    allowReferenceFrom:
+      - "view_models"
+      - "ui/pages"
+    allowSameModule: false
+```
+
+### Execute lint
+
+```bash
+flutter pub run lint_strict_dependencies:main
+```
