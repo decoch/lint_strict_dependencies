@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:lint_strict_dependencies/file_linter.dart';
+import 'package:lint_strict_dependencies/line_linter.dart';
 import 'package:lint_strict_dependencies/lint_config.dart';
-import 'package:lint_strict_dependencies/lint_file.dart';
+import 'package:lint_strict_dependencies/lint_error.dart';
 import 'package:lint_strict_dependencies/list_files.dart';
 import 'package:yaml/yaml.dart';
 
@@ -38,7 +40,6 @@ void main(List<String> args) {
     );
   }).toList();
   final config = LintConfig(['lib'], directoryConfigs);
-  stdout.writeln('config');
   stdout.writeln('config targets: ${config.targetDirectories}');
   config.directoryConfigs.forEach((c) {
     stdout.writeln('config directory: ${c.directory}');
@@ -48,16 +49,29 @@ void main(List<String> args) {
 
   final errors = [];
   final files = listFiles(config, currentPath);
+
+  final linter = FileLinter(
+    lineLinter: LineLinter(
+      config: config,
+      packageName: packageName,
+    ),
+  );
   files.forEach((file) {
     stdout.writeln('lint file: ${file.path}');
-    final error = lintFile(config, packageName, file);
-    if (error != null) {
-      stderr.writeln('file: ${error.file}, invalid: ${error.invalidImport}');
-      errors.add(error);
+    try {
+      linter.lint(file);
+    } on LintError catch (err) {
+      stderr.writeln('file: ${err.file}, invalid: ${err.invalidImport}');
+      errors.add(err);
     }
   });
 
   if (errors.isNotEmpty) {
-    throw StateError('message');
+    throw Error();
   }
+
+  stopwatch.stop();
+  stdout.write(
+    '┗━━ success Sorted ${files.length} files in ${stopwatch.elapsed.inSeconds}.${stopwatch.elapsedMilliseconds} seconds\n',
+  );
 }
