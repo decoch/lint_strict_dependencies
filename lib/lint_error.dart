@@ -1,6 +1,6 @@
 class LintError {
-  LintError(this.file, this.invalidImport);
+  LintError(this.filePath, this.import);
 
-  final String file;
-  final List<String> invalidImport;
+  final String filePath;
+  final String import;
 }

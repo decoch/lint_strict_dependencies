@@ -26,7 +26,6 @@ void main(List<String> args) {
   final configYamlFile = File('${currentPath}/strict_dependencies.yaml');
   final configYaml = loadYaml(configYamlFile.readAsStringSync());
 
-  // Reading from config in pubspec.yaml safely
   if (!configYaml.containsKey('rules')) {
     throw StateError('rules is not exists');
   }
@@ -61,12 +60,14 @@ void main(List<String> args) {
     try {
       linter.lint(file);
     } on LintError catch (err) {
-      stderr.writeln('file: ${err.file}, invalid: ${err.invalidImport}');
       errors.add(err);
     }
   });
 
   if (errors.isNotEmpty) {
+    errors.forEach((err) {
+      stderr.writeln('error in file: ${err.filePath}, import: ${err.import}');
+    });
     throw Error();
   }
 

@@ -22,7 +22,7 @@ class LineLinter {
       line,
     );
     if (invalidImports.isNotEmpty) {
-      throw LintError(filePath, invalidImports);
+      throw LintError(filePath, line);
     }
   }
 
